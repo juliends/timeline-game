@@ -41,24 +41,6 @@ app.get("/", (c) => {
   `);
 });
 
-app.get("/api/users", async (c) => {
-  const db = drizzle(c.env.DB);
-  const users = await db.select().from(schema.users);
-  return c.json({ users });
-});
-
-app.post("/api/user", async (c) => {
-  const db = drizzle(c.env.DB);
-  const { name, email } = await c.req.json();
-
-  const [newUser] = await db.insert(schema.users).values({
-    name: name,
-    email: email,
-  }).returning();
-
-  return c.json(newUser);
-});
-
 // Route for the game
 app.get("/game", (c) => {
   return c.html(
@@ -321,30 +303,6 @@ app.get("/game", (c) => {
     </html>`
   );
 });
-
-/**
- * Serve a simplified api specification for your API
- * As of writing, this is just the list of routes and their methods.
- */
-app.get("/openapi.json", c => {
-  return c.json(createOpenAPISpec(app, {
-    info: {
-      title: "Honc D1 App",
-      version: "1.0.0",
-    },
-  }))
-});
-
-/**
- * Mount the Fiberplane api explorer to be able to make requests against your API.
- * 
- * Visit the explorer at `/fp`
- */
-app.use("/fp/*", createFiberplane({
-  app,
-  openapi: { url: "/openapi.json" }
-}));
-
 
 export default app;
 
