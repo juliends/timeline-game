@@ -185,7 +185,7 @@ app.get("/game", (c) => {
             }, 2000);
           };
         
-          // Render position selectors
+          // Update the renderPositionSelectors function
           const renderPositionSelectors = () => {
             const selectors = [];
             const sortedEvents = [...displayedEvents];
@@ -196,18 +196,19 @@ app.get("/game", (c) => {
                 React.createElement("button", {
                   onClick: () => setSelectedPosition(0),
                   className: \`px-3 py-1 rounded-full \${selectedPosition === 0 ? 'bg-blue-500 text-white' : 'bg-gray-200'}\`
-                }, "Place here")
+                }, \`Before 1\`)
               )
             );
             
             // Add remaining selectors after each event
             sortedEvents.forEach((_, index) => {
+              const isLastElement = index === sortedEvents.length - 1;
               selectors.push(
                 React.createElement("div", { key: \`pos-\${index + 1}\`, className: "flex justify-center mt-2" },
                   React.createElement("button", {
                     onClick: () => setSelectedPosition(index + 1),
                     className: \`px-3 py-1 rounded-full \${selectedPosition === index + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}\`
-                  }, "Place here")
+                  }, \`\${isLastElement ? \`After \${index + 1}\` : \`Before \${index + 2}\`}\`)
                 )
               );
             });
